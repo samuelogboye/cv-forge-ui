@@ -54,32 +54,6 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
-      {/* Navbar */}
-      <nav className="border-b border-border/40 bg-card/50 backdrop-blur-xl sticky top-0 z-40">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
-              CF
-            </div>
-            <span className="text-xl font-bold text-foreground">CVForge</span>
-          </Link>
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => router.push("/billing")} className="gap-2">
-              <CreditCard className="h-4 w-4" />
-              Plans
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => router.push("/settings")} className="gap-2">
-              <Settings className="h-4 w-4" />
-              Settings
-            </Button>
-            <Button variant="ghost" size="sm" onClick={handleLogout} className="gap-2">
-              <LogOut className="h-4 w-4" />
-              Logout
-            </Button>
-          </div>
-        </div>
-      </nav>
-
       <section className="px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           {/* Header */}

@@ -99,21 +99,6 @@ export default function BillingPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
-      {/* Navbar */}
-      <nav className="border-b border-border/40 bg-card/50 backdrop-blur-xl sticky top-0 z-40">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Dashboard
-          </Link>
-          <h1 className="text-lg font-semibold text-foreground">Billing & Plans</h1>
-          <div className="w-32" />
-        </div>
-      </nav>
-
       <section className="px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
           {/* Current Subscription */}
