@@ -9,26 +9,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
-              CF
-            </div>
-            <span className="text-xl font-bold text-foreground">CVForge</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" onClick={() => router.push("/login")}>
-              Sign In
-            </Button>
-            <Button onClick={() => router.push("/signup")} className="bg-primary hover:bg-primary/90">
-              Get Started
-            </Button>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section className="relative px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
