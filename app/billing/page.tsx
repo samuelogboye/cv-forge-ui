@@ -20,7 +20,7 @@ interface Plan {
 
 interface Subscription {
   id: string
-  plan: string
+  planId: string
   status: "active" | "canceled" | "past_due"
   currentPeriodEnd: string
   autoRenew: boolean
@@ -109,7 +109,7 @@ export default function BillingPage() {
                   <h2 className="text-xl font-semibold text-foreground mb-2">Current Plan</h2>
                   <p className="text-muted-foreground mb-1">
                     You are currently on the{" "}
-                    <span className="font-semibold capitalize text-accent">{subscription.plan}</span> plan
+                    <span className="font-semibold capitalize text-accent">{subscription.planId}</span> plan
                   </p>
                   <p className="text-sm text-muted-foreground">
                     {subscription.status === "active"
