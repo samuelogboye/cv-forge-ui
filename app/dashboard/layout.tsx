@@ -15,10 +15,10 @@ export default function DashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex">
       <Sidebar open={sidebarOpen} onOpenChange={setSidebarOpen} />
 
-      <div className="lg:ml-64">
+      <div className="lg:ml-64 w-full">
         {/* Mobile Header */}
         <div className="sticky top-0 z-30 flex items-center gap-4 border-b border-border bg-card/50 backdrop-blur-xl px-4 py-3 lg:hidden">
           <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(!sidebarOpen)}>
