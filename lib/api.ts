@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://baseurl.com"
+const API_BASE_URL = "http://localhost:3000/api"
 
 interface ApiClientOptions extends RequestInit {
   requiresAuth?: boolean
@@ -26,7 +26,7 @@ async function apiRequest<T>(endpoint: string, options: ApiClientOptions = {}): 
   })
 
   if (!response.ok) {
-    throw new Error(`API error: ${response.status}`)
+    throw new Error(response)
   }
 
   return response.json()
