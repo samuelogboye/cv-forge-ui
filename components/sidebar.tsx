@@ -37,14 +37,6 @@ export default function Sidebar({ open, onOpenChange }: SidebarProps) {
         }`}
       >
         <div className="h-full flex flex-col">
-          {/* Logo */}
-          <div className="flex items-center gap-2 p-6 border-b border-border">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
-              CF
-            </div>
-            <span className="text-lg font-bold text-foreground">CVForge</span>
-          </div>
-
           {/* Navigation */}
           <nav className="flex-1 p-4 space-y-2">
             {navItems.map((item) => {
