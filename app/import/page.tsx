@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Upload, FileText, Linkedin, Loader2, CheckCircle, AlertCircle, ArrowLeft } from "lucide-react"
 import { importApi } from "@/lib/api"
+import { toast } from "sonner"
 
 interface ParsedData {
   name?: string
@@ -27,8 +28,6 @@ export default function ImportPage() {
   const [loading, setLoading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [parsedData, setParsedData] = useState<ParsedData | null>(null)
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState(false)
   const [linkedinUrl, setLinkedinUrl] = useState("")
   const [textInput, setTextInput] = useState("")
 
@@ -36,7 +35,6 @@ export default function ImportPage() {
     if (!file) return
 
     setLoading(true)
-    setError("")
     setParsedData(null)
     setUploadProgress(0)
 
@@ -45,10 +43,10 @@ export default function ImportPage() {
       // If progress tracking is needed, consider enhancing the importApi.parseDocument method
       const data = await importApi.parseDocument(file)
       setParsedData(data.parsedData)
-      setSuccess(true)
+      toast.success("File uploaded and parsed successfully!")
       setUploadProgress(100)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Upload failed")
+      toast.error(err instanceof Error ? err.message : "Upload failed")
     } finally {
       setLoading(false)
     }
@@ -56,20 +54,19 @@ export default function ImportPage() {
 
   const handleTextParse = async () => {
     if (!textInput.trim()) {
-      setError("Please paste some text")
+      toast.error("Please paste some text")
       return
     }
 
     setLoading(true)
-    setError("")
     setParsedData(null)
 
     try {
       const data = await importApi.parseText(textInput)
       setParsedData(data.parsedData)
-      setSuccess(true)
+      toast.success("Text parsed successfully!")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Parse failed")
+      toast.error(err instanceof Error ? err.message : "Parse failed")
     } finally {
       setLoading(false)
     }
@@ -77,20 +74,19 @@ export default function ImportPage() {
 
   const handleLinkedinImport = async () => {
     if (!linkedinUrl.trim()) {
-      setError("Please enter a LinkedIn URL")
+      toast.error("Please enter a LinkedIn URL")
       return
     }
 
     setLoading(true)
-    setError("")
     setParsedData(null)
 
     try {
       const data = await importApi.linkedIn(linkedinUrl)
       setParsedData(data.parsedData)
-      setSuccess(true)
+      toast.success("LinkedIn profile imported successfully!")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Import failed")
+      toast.error(err instanceof Error ? err.message : "Import failed")
     } finally {
       setLoading(false)
     }

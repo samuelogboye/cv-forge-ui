@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ArrowLeft, Save, LogOut, Lock, User, Bell, Trash2, Loader2 } from "lucide-react"
 import { userApi } from "@/lib/api"
+import { toast } from "sonner"
 
 interface UserProfile {
   id: string
@@ -26,8 +27,6 @@ export default function SettingsPage() {
   const [user, setUser] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [message, setMessage] = useState("")
-  const [error, setError] = useState("")
 
   // Profile form
   const [name, setName] = useState("")
@@ -71,17 +70,15 @@ export default function SettingsPage() {
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
-    setMessage("")
     setSaving(true)
 
     try {
       const data = await userApi.updateProfile({ name })
       setUser(data.user)
       localStorage.setItem("user", JSON.stringify(data.user))
-      setMessage("Profile updated successfully")
+      toast.success("Profile updated successfully")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Update failed")
+      toast.error(err instanceof Error ? err.message : "Update failed")
     } finally {
       setSaving(false)
     }
@@ -89,11 +86,9 @@ export default function SettingsPage() {
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
-    setMessage("")
 
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match")
+      toast.error("Passwords do not match")
       return
     }
 
@@ -101,20 +96,18 @@ export default function SettingsPage() {
 
     try {
       await userApi.changePassword(currentPassword, newPassword)
-      setMessage("Password changed successfully")
+      toast.success("Password changed successfully")
       setCurrentPassword("")
       setNewPassword("")
       setConfirmPassword("")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Change failed")
+      toast.error(err instanceof Error ? err.message : "Change failed")
     } finally {
       setSaving(false)
     }
   }
 
   const handleSavePreferences = async () => {
-    setError("")
-    setMessage("")
     setSaving(true)
 
     try {
@@ -122,9 +115,9 @@ export default function SettingsPage() {
         emailNotifications,
         weeklyDigest,
       })
-      setMessage("Preferences updated successfully")
+      toast.success("Preferences updated successfully")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Update failed")
+      toast.error(err instanceof Error ? err.message : "Update failed")
     } finally {
       setSaving(false)
     }
@@ -147,10 +140,10 @@ export default function SettingsPage() {
       await userApi.deleteAccount()
       localStorage.removeItem("token")
       localStorage.removeItem("user")
+      toast.success("Account deleted successfully")
       router.push("/")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Deletion failed")
-    } finally {
+      toast.error(err instanceof Error ? err.message : "Deletion failed")
       setSaving(false)
     }
   }

@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card"
 import { Plus, LogOut, FileText, Clock, Download, Edit2, Settings, CreditCard } from "lucide-react"
 import Link from "next/link"
 import { cvApi } from "@/lib/api"
+import { toast } from "sonner"
 
 interface CV {
   id: string
@@ -41,6 +42,7 @@ export default function DashboardPage() {
       setCvs(data.cvs || [])
     } catch (err) {
       console.error("Failed to fetch CVs:", err)
+      toast.error("Failed to load your resumes")
     } finally {
       setLoading(false)
     }

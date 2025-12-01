@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { ArrowLeft, Mail, Lock, User } from "lucide-react"
 import { authApi } from "@/lib/api"
+import { toast } from "sonner"
 
 export default function SignupPage() {
   const router = useRouter()
@@ -19,14 +20,12 @@ export default function SignupPage() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match")
+      toast.error("Passwords do not match")
       return
     }
 
@@ -36,9 +35,10 @@ export default function SignupPage() {
       const data = await authApi.register(name, email, password)
       localStorage.setItem("token", data.token)
       localStorage.setItem("user", JSON.stringify(data.user))
+      toast.success("Account created successfully!")
       router.push("/onboarding")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Signup failed")
+      toast.error(err instanceof Error ? err.message : "Signup failed")
     } finally {
       setLoading(false)
     }

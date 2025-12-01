@@ -10,6 +10,7 @@ import { Download, Plus, Sparkles, Upload, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import ImportModal from "@/components/import-modal"
 import { cvApi, aiApi } from "@/lib/api"
+import { toast } from "sonner"
 
 export default function EditorPage() {
   const router = useRouter()
@@ -31,18 +32,19 @@ export default function EditorPage() {
     }
 
     if (cvId !== "new") {
-      fetchCV(token, cvId)
+      fetchCV(cvId)
     } else {
       setLoading(false)
     }
   }, [router, cvId])
 
-  const fetchCV = async (token: string, id: string) => {
+  const fetchCV = async (id: string) => {
     try {
       const data = await cvApi.getById(id)
-      setCv(data)
-      setContent(data.content || "")
-      setTemplate(data.template || "modern")
+      console.log("data", data)
+      setCv(data.cv)
+      setContent(data.cv.content || "")
+      setTemplate(data.cv.template || "modern")
     } catch (err) {
       console.error("Failed to fetch CV:", err)
     } finally {
@@ -52,7 +54,7 @@ export default function EditorPage() {
 
   const handleOptimizeWithAI = async () => {
     if (!jdInput.trim()) {
-      alert("Please paste a job description")
+      toast.error("Please paste a job description")
       return
     }
 
@@ -62,9 +64,10 @@ export default function EditorPage() {
       const data = await aiApi.optimize(content, jdInput)
       setContent(data.optimizedContent)
       setJdInput("")
+      toast.success("Resume optimized successfully!")
     } catch (err) {
       console.error("Failed to optimize CV:", err)
-      alert("Failed to optimize CV")
+      toast.error("Failed to optimize CV")
     } finally {
       setAiLoading(false)
     }
@@ -83,14 +86,16 @@ export default function EditorPage() {
 
       if (cvId === "new") {
         const data = await cvApi.create(cvData)
-        alert("CV saved successfully")
+        toast.success("CV saved successfully!")
         router.push(`/editor/${data.id}`)
       } else {
+        console.log("cvData", cvData)
         await cvApi.update(cvId, cvData)
-        alert("CV saved successfully")
+        toast.success("CV updated successfully!")
       }
     } catch (err) {
       console.error("Failed to save CV:", err)
+      toast.error("Failed to save CV. Please try again.")
     }
   }
 

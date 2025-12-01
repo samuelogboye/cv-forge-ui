@@ -11,26 +11,26 @@ import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { ArrowLeft, Mail, Lock } from "lucide-react"
 import { authApi } from "@/lib/api"
+import { toast } from "sonner"
 
 export default function LoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    setError("")
 
     try {
       const data = await authApi.login(email, password)
       localStorage.setItem("token", data.token)
       localStorage.setItem("user", JSON.stringify(data.user))
+      toast.success("Login successful!")
       router.push("/dashboard")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed")
+      toast.error(err instanceof Error ? err.message : "Login failed")
     } finally {
       setLoading(false)
     }
@@ -57,7 +57,7 @@ export default function LoginPage() {
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
-            {error && <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>}
+            {/* {error && <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>} */}
 
             <div className="space-y-2">
               <Label htmlFor="email" className="text-foreground">

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ArrowLeft, Check, Loader2, CreditCard } from "lucide-react"
 import { billingApi } from "@/lib/api"
+import { toast } from "sonner"
 
 interface Plan {
   id: string
@@ -32,7 +33,6 @@ export default function BillingPage() {
   const [subscription, setSubscription] = useState<Subscription | null>(null)
   const [loading, setLoading] = useState(true)
   const [upgrading, setUpgrading] = useState(false)
-  const [error, setError] = useState("")
 
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -55,7 +55,7 @@ export default function BillingPage() {
       setSubscription(subData.subscription || null)
     } catch (err) {
       console.error("Failed to fetch billing data:", err)
-      setError("Failed to load billing information")
+      toast.error("Failed to load billing information")
     } finally {
       setLoading(false)
     }
@@ -63,7 +63,6 @@ export default function BillingPage() {
 
   const handleUpgrade = async (planId: string) => {
     setUpgrading(true)
-    setError("")
 
     try {
       const data = await billingApi.upgrade(planId)
@@ -72,8 +71,7 @@ export default function BillingPage() {
         window.location.href = data.checkoutUrl
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Upgrade failed")
-    } finally {
+      toast.error(err instanceof Error ? err.message : "Upgrade failed")
       setUpgrading(false)
     }
   }
@@ -87,8 +85,7 @@ export default function BillingPage() {
         window.location.href = data.portalUrl
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Portal access failed")
-    } finally {
+      toast.error(err instanceof Error ? err.message : "Portal access failed")
       setUpgrading(false)
     }
   }
@@ -139,13 +136,6 @@ export default function BillingPage() {
             </Card>
           )}
 
-          {/* Error Message */}
-          {error && (
-            <div className="rounded-lg bg-destructive/10 p-4 mb-12 text-sm text-destructive border border-destructive/30">
-              {error}
-            </div>
-          )}
-
           {/* Plans */}
           <div>
             <div className="mb-12 text-center">
@@ -178,7 +168,7 @@ export default function BillingPage() {
 
                     <Button
                       onClick={() => handleUpgrade(plan.id)}
-                      disabled={upgrading || subscription?.plan === plan.id}
+                      disabled={upgrading || subscription?.planId === plan.id}
                       className={`w-full mb-6 gap-2 ${
                         plan.popular ? "bg-primary hover:bg-primary/90" : "bg-accent hover:bg-accent/90"
                       }`}
@@ -188,7 +178,7 @@ export default function BillingPage() {
                           <Loader2 className="h-4 w-4 animate-spin" />
                           Processing...
                         </>
-                      ) : subscription?.plan === plan.id ? (
+                      ) : subscription?.planId === plan.id ? (
                         "Current Plan"
                       ) : (
                         "Choose Plan"
