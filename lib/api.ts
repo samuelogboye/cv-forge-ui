@@ -26,7 +26,16 @@ async function apiRequest<T>(endpoint: string, options: ApiClientOptions = {}): 
   })
 
   if (!response.ok) {
-    throw new Error(response)
+    // Parse error response to get the message
+    let errorMessage = `API error: ${response.status}`
+    try {
+      const errorData = await response.json()
+      errorMessage = errorData.message || errorData.error || errorMessage
+    } catch {
+      // If JSON parsing fails, use status text
+      errorMessage = response.statusText || errorMessage
+    }
+    throw new Error(errorMessage)
   }
 
   return response.json()
@@ -118,7 +127,14 @@ export const importApi = {
     })
 
     if (!response.ok) {
-      throw new Error(`API error: ${response.status}`)
+      let errorMessage = `API error: ${response.status}`
+      try {
+        const errorData = await response.json()
+        errorMessage = errorData.message || errorData.error || errorMessage
+      } catch {
+        errorMessage = response.statusText || errorMessage
+      }
+      throw new Error(errorMessage)
     }
 
     return response.json()
