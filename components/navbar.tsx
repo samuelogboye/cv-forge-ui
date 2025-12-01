@@ -25,6 +25,10 @@ export default function Navbar({ authenticated = false }: NavbarProps) {
 
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    // Re-check auth state whenever pathname changes
     const userData = localStorage.getItem("user")
     if (userData) {
       try {
@@ -32,8 +36,10 @@ export default function Navbar({ authenticated = false }: NavbarProps) {
       } catch {
         setUser(null)
       }
+    } else {
+      setUser(null)
     }
-  }, [])
+  }, [pathname])
 
   const isAuthPage = pathname?.includes("/login") || pathname?.includes("/signup") || pathname?.includes("/onboarding")
   const isDashboard =
